@@ -6,6 +6,7 @@ from agents.critic_agent import critic_agent
 from agents.revision_agent import revision_agent
 from agents.summary_agent import summary_agent
 from agents.memory_router_agent import memory_router_agent
+from agents.memory_save_agent import memory_save_agent
 
 from utils.task_parser import extract_tasks
 
@@ -72,7 +73,14 @@ def run_workflow(user_query):
 
     summary = "\n".join(summary_list)
     final_summary = summary_agent(summary)
-    save_memory(final_summary)
+
+    decision = memory_save_agent(
+        user_query,
+        final_summary
+        )
+    
+    if decision == "SAVE_MEMORY":
+        save_memory(final_summary)
 
     return {
         "memory":memory_context,

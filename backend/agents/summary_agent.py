@@ -8,6 +8,7 @@ groq_api_key = os.getenv("GROQ_API_KEY")
 
 llm = ChatGroq(
     model = "llama-3.3-70b-versatile",
+    # model="llama-3.1-8b-instant",
     api_key=groq_api_key
 )
 

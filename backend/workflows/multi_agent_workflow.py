@@ -1,8 +1,9 @@
-from memory.chroma_memory import retrieve_memory
+from memory.chroma_memory import retrieve_memory,save_memory
 
 from agents.planner_agent import planner_agent
 from agents.research_agent import research_agent
 from agents.critic_agent import critic_agent
+from agents.revision_agent import revision_agent
 
 from utils.task_parser import extract_tasks
 
@@ -39,14 +40,18 @@ def run_workflow(user_query):
 
         research_result = research_agent(task)
         critic_result = critic_agent(research_result)
+        revision_result = revision_agent(task,research_result,critic_result)
 
         all_results.append(
             {
                 "task":task,
                 "research":research_result,
-                "critic":critic_result
+                "critic":critic_result,
+                "revision":revision_result
             }
         )
+
+        save_memory(revision_result)
 
     return {
         "memory":memory_context,

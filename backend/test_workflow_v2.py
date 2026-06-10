@@ -1,7 +1,7 @@
 from workflows.multi_agent_workflow import run_workflow
 
 result = run_workflow(
-    "What should i learn next?"
+    "What is the capital of delhi?"
 )
 
 print("\n---Result---\n")

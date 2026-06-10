@@ -5,6 +5,7 @@ from agents.research_agent import research_agent
 from agents.critic_agent import critic_agent
 from agents.revision_agent import revision_agent
 from agents.summary_agent import summary_agent
+from agents.memory_router_agent import memory_router_agent
 
 from utils.task_parser import extract_tasks
 
@@ -21,14 +22,25 @@ def run_workflow(user_query):
     else:
         memory_context=""
 
-    #Combine memory and user query
-    enhanced_query = f"""
+    #Combine memory and user query or just use user query
 
-    Memory : 
-    {memory_context}
-    Question :
-    {user_query}
-    """
+    if not memory_context :
+        enhanced_query = user_query
+
+    else:
+
+        decision = memory_router_agent(user_query,memory_context)
+
+        if decision == "USE_MEMORY":
+            enhanced_query = f"""
+            Memory : 
+            {memory_context}
+            Question :
+            {user_query}
+            """
+
+        else:
+            enhanced_query = user_query
 
     #Planner agent
     plan = planner_agent(enhanced_query)

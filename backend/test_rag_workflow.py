@@ -1,5 +1,5 @@
 from memory.chroma_memory import retrieve_memory
-from agents.planner_agent import planner_agent
+from backend.agents.worker_agents.planner_agent import planner_agent
 
 user_query = "What should i learn next?"
 

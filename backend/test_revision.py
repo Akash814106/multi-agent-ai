@@ -1,4 +1,4 @@
-from agents.revision_agent import revision_agent
+from backend.agents.worker_agents.revision_agent import revision_agent
 
 
 task = "Explain Spring Boot Dependency Injection"

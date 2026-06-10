@@ -26,8 +26,8 @@
 
 
 
-from agents.planner_agent import planner_agent
-from agents.research_agent import research_agent
+from backend.agents.worker_agents.planner_agent import planner_agent
+from backend.agents.worker_agents.research_agent import research_agent
 from utils.task_parser import extract_tasks
 
 user_query =  "Learn Spring Boot in 30 days"

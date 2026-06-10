@@ -1,4 +1,4 @@
-from agents.memory_router_agent import memory_router_agent
+from backend.agents.control_agents.memory_router_agent import memory_router_agent
 
 user_query = "What is the capital of France?"
 

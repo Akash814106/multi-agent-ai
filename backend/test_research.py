@@ -1,4 +1,4 @@
-from agents.research_agent import research_agent
+from backend.agents.worker_agents.research_agent import research_agent
 
 topic = "Spring dependency injection"
 

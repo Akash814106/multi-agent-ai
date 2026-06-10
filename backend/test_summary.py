@@ -1,4 +1,4 @@
-from agents.summary_agent import summary_agent
+from backend.agents.worker_agents.summary_agent import summary_agent
 
 revision_output = """
 Microservices architecture is an approach where applications

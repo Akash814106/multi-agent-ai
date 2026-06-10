@@ -1,4 +1,4 @@
-from agents.critic_agent import critic_agent
+from backend.agents.worker_agents.critic_agent import critic_agent
 
 sample_content = """
 Spring Dependency Injection is a design pattern

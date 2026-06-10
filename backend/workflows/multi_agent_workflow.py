@@ -1,12 +1,12 @@
 from memory.chroma_memory import retrieve_memory,save_memory
 
-from agents.planner_agent import planner_agent
-from agents.research_agent import research_agent
-from agents.critic_agent import critic_agent
-from agents.revision_agent import revision_agent
-from agents.summary_agent import summary_agent
-from agents.memory_router_agent import memory_router_agent
-from agents.memory_save_agent import memory_save_agent
+from agents.worker_agents.planner_agent import planner_agent
+from agents.worker_agents.research_agent import research_agent
+from agents.worker_agents.critic_agent import critic_agent
+from agents.worker_agents.revision_agent import revision_agent
+from agents.worker_agents.summary_agent import summary_agent
+from agents.control_agents.memory_router_agent import memory_router_agent
+from agents.control_agents.memory_save_agent import memory_save_agent
 
 from utils.task_parser import extract_tasks
 

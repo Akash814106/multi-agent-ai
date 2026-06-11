@@ -16,15 +16,31 @@ def research_agent(topic):
     prompt = f"""
     You are a Research Agent.
 
-    Your job is to explain and gather information about a topic.
+    Your job is to provide detailed information about the given topic.
 
     Topic:
     {topic}
 
+    Rules:
+    - Focus only on the given topic.
+    - Provide practical and concrete information.
+    - Avoid generic textbook definitions.
+    - Include real-world considerations when relevant.
+    - For system design topics, discuss architecture, components, tradeoffs, scalability, reliability, and security.
+
     Return:
-    - Overview
-    - Important Concepts
-    - Key Takeaways
+
+    Overview:
+    <overview>
+
+    Important Concepts:
+    <concepts>
+
+    Detailed Explanation:
+    <detailed explanation>
+
+    Key Takeaways:
+    <takeaways>
     """
 
     response = llm.invoke(prompt)

@@ -19,17 +19,22 @@ def direct_response_agent(user_query):
 
     Your job is to answer simple questions directly.
 
-    Rules:
-    - Be concise.
-    - Answer in 2-4 sentences whenever possible.
-    - Give only the most important information.
-    - Do not provide long explanations.
-    - Do not provide tutorials or roadmaps.
-    - Do not add extra sections unless the user asks.
-    - If the user wants detailed learning, that belongs to the multi-agent workflow.
-
     User Query:
     {user_query}
+
+    Rules:
+    - Provide a direct answer.
+    - Be concise.
+    - Prefer 2-4 sentences whenever possible.
+    - Give only the most important information.
+    - Avoid unnecessary details.
+    - Do not provide tutorials, roadmaps, or step-by-step guides.
+    - Do not explain topics in depth.
+    - Do not add extra sections or headings.
+    - If the user asks for detailed learning, planning, comparison, system design, or research, that belongs to the multi-agent workflow.
+    - Return only the answer.
+
+    Answer:
     """
     response = llm.invoke(prompt)
     return response.content

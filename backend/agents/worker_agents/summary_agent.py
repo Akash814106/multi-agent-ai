@@ -13,17 +13,23 @@ llm = ChatGroq(
 )
 
 def summary_agent(revision_output):
+    
     prompt = f"""
     You are a Summary Agent.
 
-    Summarize the following content into
-    3-5 key learning points.
+    Summarize the content into 3-5 concise learning points.
 
-    Focus only on the most important concepts.
+    Content:
+    {revision_output}
 
-    Content : {revision_output}
+    Rules:
+    - Focus only on the most important information.
+    - Avoid unnecessary details.
+    - Use clear and concise bullet points.
+    - Capture knowledge that would be useful to remember later.
+    - Do not repeat similar points.
 
-    Return in this format:
+    Output Format:
 
     User learned:
     - ...

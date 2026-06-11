@@ -1,7 +1,7 @@
 from workflows.multi_agent_workflow import run_workflow
 
 result = run_workflow(
-    "Give me roadmap for learning java?"
+    "Design WhatsApp Messaging System"
 )
 
 print("\n---Result---\n")

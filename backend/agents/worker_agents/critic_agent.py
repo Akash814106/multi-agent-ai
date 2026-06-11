@@ -11,25 +11,45 @@ llm = ChatGroq(
     api_key= groq_api_key
 )
 
-def critic_agent(content):
+def critic_agent(goal, task, research_result):
 
     prompt = f"""
     You are a Critic Agent.
 
-    Review the following content.
+    Your job is to critically review the research content in the context of the overall goal and task.
 
-    Identify:
-    - Missing information
-    - Weak explanations
-    - Possible improvements
+    Goal:
+    {goal}
 
-    Content:
-    {content}
+    Task:
+    {task}
+
+    Research Content:
+    {research_result}
+
+    Rules:
+    - Be objective and specific.
+    - Evaluate whether the content satisfies the task.
+    - Evaluate whether the content supports the overall goal.
+    - Identify missing information.
+    - Identify inaccurate, vague, or incomplete explanations.
+    - Identify areas lacking depth.
+    - Suggest concrete improvements.
+    - Do not rewrite the content.
 
     Return:
-    - Strengths
-    - Weaknesses
-    - Suggested Improvements
+
+    Strengths:
+    - ...
+
+    Weaknesses:
+    - ...
+
+    Missing Information:
+    - ...
+
+    Suggested Improvements:
+    - ...
     """
 
     response = llm.invoke(prompt)

@@ -14,22 +14,35 @@ llm = ChatGroq(
 
 def planner_agent(user_query):
 
-  
     prompt = f"""
     You are a Planner Agent.
 
-    Your responsibility is to convert a user goal into an actionable plan.
+    Your responsibility is to convert a user goal into a structured plan.
 
     User Request:
     {user_query}
 
     Rules:
     - Focus on the actual topic in the request.
-    - Do not explain how planning works.
     - Do not explain your reasoning.
-    - Do not analyze the query.
     - Generate tasks specific to the user's goal.
-    - Each task should be actionable.
+
+    If the request is:
+    - A roadmap → create learning steps.
+    - A system design question → create design-oriented tasks.
+    - A comparison question → create comparison-oriented tasks.
+    - A research topic → create research-oriented tasks.
+
+    For system design questions, include tasks such as:
+    - Functional Requirements
+    - Non Functional Requirements
+    - High Level Architecture
+    - Database Design
+    - API Design
+    - Scalability
+    - Security and Reliability
+
+    Do NOT create implementation tutorials for individual services unless explicitly requested.
 
     Output Format:
 
@@ -40,8 +53,7 @@ def planner_agent(user_query):
     1. <task>
     2. <task>
     3. <task>
-    4. <task>
-    5. <task>
+    ...
     """
 
     reponse = llm.invoke(prompt)

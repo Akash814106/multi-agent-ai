@@ -1,6 +1,6 @@
-from backend.agents.worker_agents.planner_agent import planner_agent
+from agents.worker_agents.planner_agent import planner_agent
 
-query = "How can i learn spring boot in 30 days?"
+query = "Design WhatsApp Messaging System"
 
 result = planner_agent(query)
 

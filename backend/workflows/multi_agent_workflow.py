@@ -49,6 +49,10 @@ def run_workflow(user_query):
         enhanced_user_query = query_enhancement_agent(user_query)
     
     
+    #Enhanced query
+    print("\nEnhanced Query :\n")
+    print(enhanced_user_query)
+
     #Retrieve memory
     memories = retrieve_memory(enhanced_user_query)
 
@@ -80,16 +84,31 @@ def run_workflow(user_query):
     #Planner agent
     plan = planner_agent(enhanced_query)
 
+    #Exrtact goal
+    goal = ""
+
+    for line in plan.splitlines():
+        if line.startswith("Goal:"):
+            goal = line.replace("Goal:", "").strip()
+            break
+
     #Extract tasks from plan
     tasks = extract_tasks(plan)
 
-    #Send task to research agent and research output to critic agent
+    #Send task,goal to research agent and research output to critic agent
 
     for task in tasks:
+        
+        research_input = f"""
+        Goal:
+        {goal}
 
-        research_result = research_agent(task)
-        critic_result = critic_agent(research_result)
-        revision_result = revision_agent(task,research_result,critic_result)
+        Task:
+        {task}
+        """
+        research_result = research_agent(research_input)
+        critic_result = critic_agent(goal,task,research_result)
+        revision_result = revision_agent(goal,task,research_result,critic_result)
         summary_result = summary_agent(revision_result)
 
         all_results.append(

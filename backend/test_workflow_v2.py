@@ -1,7 +1,7 @@
 from workflows.multi_agent_workflow import run_workflow
 
 result = run_workflow(
-    "I know Java and Spring Boot. Create a roadmap to become a Backend Architect and explain each step."
+    "Give me roadmap for learning java?"
 )
 
 print("\n---Result---\n")

@@ -10,6 +10,7 @@ from agents.worker_agents.direct_response_agent import direct_response_agent
 from agents.control_agents.memory_router_agent import memory_router_agent
 from agents.control_agents.memory_save_agent import memory_save_agent
 from agents.control_agents.query_router_agent import query_router_agent
+from agents.control_agents.query_enhancement_agent import query_enhancement_agent
 
 from utils.task_parser import extract_tasks
 
@@ -27,7 +28,6 @@ def run_workflow(user_query):
     if query_decision == "DIRECT_RESPONSE":
 
         result = direct_response_agent(user_query)
-
         save_decision = memory_save_agent(user_query,result)
 
         if save_decision == "SAVE_MEMORY":
@@ -38,15 +38,19 @@ def run_workflow(user_query):
     elif query_decision == "MULTI_AGENT_WORKFLOW":
         print("\n--- Multi-Agent Workflow Selected ---\n")
 
+        enhanced_user_query = query_enhancement_agent(user_query)
+
     else:
         print(
             f"Invalid router decision: {query_decision}. "
             "Falling back to MULTI_AGENT_WORKFLOW."
         )
-    
 
+        enhanced_user_query = query_enhancement_agent(user_query)
+    
+    
     #Retrieve memory
-    memories = retrieve_memory(user_query)
+    memories = retrieve_memory(enhanced_user_query)
 
     if memories and memories[0]:
         memory_context = "\n".join(memories[0])
@@ -56,22 +60,22 @@ def run_workflow(user_query):
     #Combine memory and user query or just use user query
 
     if not memory_context :
-        enhanced_query = user_query
+        enhanced_query = enhanced_user_query
 
     else:
 
-        decision = memory_router_agent(user_query,memory_context)
+        memory_decision = memory_router_agent(enhanced_user_query,memory_context)
 
-        if decision == "USE_MEMORY":
+        if memory_decision == "USE_MEMORY":
             enhanced_query = f"""
             Memory : 
             {memory_context}
             Question :
-            {user_query}
+            {enhanced_user_query}
             """
 
         else:
-            enhanced_query = user_query
+            enhanced_query = enhanced_user_query
 
     #Planner agent
     plan = planner_agent(enhanced_query)
@@ -104,16 +108,17 @@ def run_workflow(user_query):
     summary = "\n".join(summary_list)
     final_summary = summary_agent(summary)
 
-    decision = memory_save_agent(
-        user_query,
+    save_decision = memory_save_agent(
+        enhanced_user_query,
         final_summary
         )
     
-    if decision == "SAVE_MEMORY":
+    if save_decision == "SAVE_MEMORY":
         save_memory(final_summary)
 
     return {
         "memory":memory_context,
+        "enhanced_user_query":enhanced_user_query,
         "plan":plan,
         "tasks":tasks,
         "results":all_results,

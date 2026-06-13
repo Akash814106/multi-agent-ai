@@ -1,14 +1,15 @@
 from dotenv import load_dotenv
 import os
 from langchain_groq import ChatGroq
+from utils.api_counter import increment
 
 load_dotenv()
-groq_api_key = os.getenv("GROQ_API_KEY")
+groq_api_key1 = os.getenv("GROQ_API_KEY1")
 
 llm = ChatGroq(
     model = "llama-3.3-70b-versatile",
     # model="llama-3.1-8b-instant",
-    api_key= groq_api_key
+    api_key= groq_api_key1
 )
 
 def query_enhancement_agent(user_query):
@@ -67,5 +68,6 @@ def query_enhancement_agent(user_query):
     Enhanced Query:
     """
 
+    increment("query_enhancement")
     response = llm.invoke(prompt)
     return response.content.strip()

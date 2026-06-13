@@ -2,14 +2,15 @@ from dotenv import load_dotenv
 import os
 import json
 from langchain_groq import ChatGroq
+from utils.api_counter import increment
 
 load_dotenv()
-groq_api_key = os.getenv("GROQ_API_KEY")
+groq_api_key1 = os.getenv("GROQ_API_KEY1")
 
 llm = ChatGroq(
     model = "llama-3.3-70b-versatile",
     # model="llama-3.1-8b-instant",
-    api_key= groq_api_key
+    api_key= groq_api_key1
 )
 
 def direct_response_agent(user_query):
@@ -36,5 +37,7 @@ def direct_response_agent(user_query):
 
     Answer:
     """
+
+    increment("direct_response")
     response = llm.invoke(prompt)
     return response.content

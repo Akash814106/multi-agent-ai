@@ -2,14 +2,15 @@ from dotenv import load_dotenv
 import os
 import json
 from langchain_groq import ChatGroq
+from utils.api_counter import increment
 
 load_dotenv()
-groq_api_key = os.getenv("GROQ_API_KEY")
+groq_api_key1 = os.getenv("GROQ_API_KEY1")
 
 llm = ChatGroq(
     model = "llama-3.3-70b-versatile",
     # model="llama-3.1-8b-instant",
-    api_key= groq_api_key
+    api_key= groq_api_key1
 )
 
 def query_router_agent(user_query):
@@ -40,6 +41,8 @@ def query_router_agent(user_query):
     Do not return markdown.
     Do not return explanations outside JSON.
     """
+   
+   increment("query_router")
    response = llm.invoke(prompt)
 
    print("\nRaw response\n")

@@ -95,6 +95,10 @@ def run_workflow(user_query):
     #Extract tasks from plan
     tasks = extract_tasks(plan)
 
+    #Print task length
+
+    print(f"Task Count: {len(tasks)}")
+
     #Send task,goal to research agent and research output to critic agent
 
     for task in tasks:

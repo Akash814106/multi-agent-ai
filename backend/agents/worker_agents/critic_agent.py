@@ -1,14 +1,15 @@
 from dotenv import load_dotenv
 import os
 from langchain_groq import ChatGroq
+from utils.api_counter import increment
 
 load_dotenv()
-groq_api_key = os.getenv("GROQ_API_KEY")
+groq_api_key3 = os.getenv("GROQ_API_KEY3")
 
 llm = ChatGroq(
     model = "llama-3.3-70b-versatile",
     # model="llama-3.1-8b-instant",
-    api_key= groq_api_key
+    api_key= groq_api_key3
 )
 
 def critic_agent(goal, task, research_result):
@@ -52,6 +53,7 @@ def critic_agent(goal, task, research_result):
     - ...
     """
 
+    increment("critic")
     response = llm.invoke(prompt)
 
     return response.content

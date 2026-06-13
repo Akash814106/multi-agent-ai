@@ -101,6 +101,9 @@ def run_workflow(user_query):
 
     #Send task,goal to research agent and research output to critic agent
 
+    revision_executed = 0
+    revision_skipped = 0
+
     for task in tasks:
         
         research_input = f"""
@@ -111,8 +114,18 @@ def run_workflow(user_query):
         {task}
         """
         research_result = research_agent(research_input)
+
         critic_result = critic_agent(goal,task,research_result)
-        revision_result = revision_agent(goal,task,research_result,critic_result)
+        score = critic_result["score"]
+
+        if score <=8:
+            revision_result = revision_agent(goal,task,research_result,critic_result)
+            revision_executed += 1
+
+        else :
+            revision_result = research_result
+            revision_skipped += 1
+            
         summary_result = summary_agent(revision_result)
 
         all_results.append(
@@ -145,6 +158,8 @@ def run_workflow(user_query):
         "plan":plan,
         "tasks":tasks,
         "results":all_results,
+        "revision_executed":revision_executed,
+        "revision_skipped":revision_skipped,
         "final_summary":final_summary
     }      
 

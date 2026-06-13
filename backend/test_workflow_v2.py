@@ -3,7 +3,7 @@ from utils.api_counter import print_counts
 
 
 result = run_workflow(
-    "Design WhatsApp Messaging System"
+    "Create roadmap for learning Java"
 )
 
 with open("workflow_output.txt", "w", encoding="utf-8") as f:

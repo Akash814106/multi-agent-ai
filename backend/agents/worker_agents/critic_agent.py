@@ -119,5 +119,25 @@ def critic_agent(goal, task, research_result):
     print("\nRaw Critic Response:\n")
     print(response.content)
 
-    result = json.loads(response.content)
+    cleaned_response = response.content.strip()
+
+    cleaned_response = cleaned_response.replace(
+        "```json",
+        ""
+    )
+
+    cleaned_response = cleaned_response.replace(
+        "```",
+        ""
+    )
+
+    try:
+        result = json.loads(cleaned_response)
+
+    except Exception as e:
+
+        print("\nJSON ERROR\n")
+        print(cleaned_response)
+        raise e
+
     return result

@@ -45,8 +45,8 @@ def query_router_agent(user_query):
    increment("query_router")
    response = llm.invoke(prompt)
 
-   print("\nRaw response\n")
-   print(response.content)
+#    print("\nRaw response\n")
+#    print(response.content)
    
    result = json.loads(response.content)
    return result

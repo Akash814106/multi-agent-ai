@@ -116,8 +116,8 @@ def critic_agent(goal, task, research_result):
 
     response = llm.invoke(prompt)
 
-    print("\nRaw Critic Response:\n")
-    print(response.content)
+    # print("\nRaw Critic Response:\n")
+    # print(response.content)
 
     cleaned_response = response.content.strip()
 

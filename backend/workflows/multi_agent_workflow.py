@@ -155,10 +155,11 @@ def run_workflow(user_query):
     metrics.revision_executed = revision_executed
     metrics.revision_skipped = revision_skipped
 
-    metrics.revision_rate = round(
-        revision_executed / len(tasks) * 100,
-        2
-    )
+    if len(tasks) > 0:
+        metrics.revision_rate = round(
+            revision_executed / len(tasks) * 100,
+            2
+        )
 
     summary = "\n".join(summary_list)
     final_summary = summary_agent(summary)
@@ -178,10 +179,11 @@ def run_workflow(user_query):
         datetime.now()
     )
 
-    metrics.avg_time_per_task = round(
-        metrics.execution_time / metrics.task_count,
-        2
-    )
+    if metrics.task_count > 0:
+        metrics.avg_time_per_task = round(
+            metrics.execution_time / metrics.task_count,
+            2
+        )
 
     return {
         "memory":memory_context,

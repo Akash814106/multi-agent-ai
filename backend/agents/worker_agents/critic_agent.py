@@ -53,6 +53,8 @@ def critic_agent(goal, task, research_result):
     - Be strict when assigning scores.
     - Do not give high scores merely because the content is technically correct.
 
+    Do not penalize content for missing information unless that information is necessary to complete the given task.
+
     Scoring Guide:
 
     9-10:

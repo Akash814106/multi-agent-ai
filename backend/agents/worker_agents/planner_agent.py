@@ -85,6 +85,9 @@ def planner_agent(user_query):
       - Limitations
       - Real World Applications
       - Key Takeaways
+
+    Prioritize breadth over excessive granularity.
+    Avoid splitting closely related topics into separate tasks.
     
     Output Format:
     

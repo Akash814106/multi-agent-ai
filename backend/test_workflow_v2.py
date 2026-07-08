@@ -3,27 +3,14 @@ from utils.api_counter import print_counts
 import json
 
 result = run_workflow(
-    "Create roadmap for learning Java"
+    "Design YouTube System"
 )
-
-# with open("workflow_output.txt", "w", encoding="utf-8") as f:
-#     f.write(str(result))
-
-# print("Output saved to workflow_output.txt")
-
-# print_counts()
-# print("\n---Result---\n")
-# print(result)
-
-
-
 
 with open(
     "workflow_output.json",
     "w",
     encoding="utf-8"
 ) as f:
-
     json.dump(
         result,
         f,

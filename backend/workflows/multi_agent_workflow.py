@@ -20,6 +20,10 @@ from agents.control_agents.query_enhancement_agent import query_enhancement_agen
 from utils.task_parser import extract_tasks
 
 
+MAX_RETRIES = 2
+TARGET_SCORE = 8
+
+
 def process_task(goal,task):
     revision_executed = 0
     revision_skipped = 0
@@ -35,20 +39,57 @@ def process_task(goal,task):
     research_result = research_agent(research_input)
     critic_result = critic_agent(goal,task,research_result)
     score = critic_result["score"]
-    if score < 8:
-        revision_result = revision_agent(goal,task,research_result,critic_result)
-        revision_executed += 1
-    else :
-        revision_result = research_result
-        revision_skipped += 1
-    summary_result = summary_agent(revision_result)
+
+    best_score = score
+    best_result = research_result
+    best_critic = critic_result
+
+    # if score < 8:
+    #     revision_result = revision_agent(goal,task,research_result,critic_result)
+    #     revision_executed += 1
+    # else :
+    #     revision_result = research_result
+    #     revision_skipped += 1
+
+    retry = 0
+
+    while best_score < TARGET_SCORE and retry < MAX_RETRIES:
+
+        revision_result = revision_agent(
+            goal,
+            task,
+            best_result,
+            best_critic
+        )
+
+        revision_executed+=1
+
+        critic_result = critic_agent(
+            goal,
+            task,
+            revision_result
+        )
+
+        score = critic_result["score"]
+
+        if score > best_score:
+            best_score = score
+            best_result = revision_result
+            best_critic = critic_result
+
+        retry+=1
+
+    if revision_executed == 0:
+        revision_skipped =1
+
+    summary_result = summary_agent(best_result)
     # print(f"Finished: {task}")
     
     return{
         "task":task,
         "research":research_result,
-        "critic":critic_result,
-        "revision":revision_result,
+        "critic":best_critic,
+        "revision":best_result,
         "summary":summary_result,
         "revision_executed": revision_executed,
         "revision_skipped": revision_skipped

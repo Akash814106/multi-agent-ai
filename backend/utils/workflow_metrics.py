@@ -17,3 +17,5 @@ class WorkflowMetrics:
         self.query_type = ""
 
         self.timestamp = ""
+
+        self.failed_tasks = 0

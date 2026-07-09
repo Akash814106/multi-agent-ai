@@ -23,76 +23,98 @@ from utils.task_parser import extract_tasks
 MAX_RETRIES = 2
 TARGET_SCORE = 8
 
+MAX_WORKERS = 3
 
 def process_task(goal,task):
+    
+    research_result = None
+    critic_result = None
+    revision_result = None
+    summary_result = None
+
+    best_result = None
+    best_critic = None
+    best_score = 0
+
     revision_executed = 0
     revision_skipped = 0
 
-#    print(f"Starting: {task}")
+    try:
 
-    research_input = f"""
-    Goal:
-    {goal}
-    Task:
-    {task}
-    """
-    research_result = research_agent(research_input)
-    critic_result = critic_agent(goal,task,research_result)
-    score = critic_result["score"]
+#        print(f"Starting: {task}")
 
-    best_score = score
-    best_result = research_result
-    best_critic = critic_result
-
-    # if score < 8:
-    #     revision_result = revision_agent(goal,task,research_result,critic_result)
-    #     revision_executed += 1
-    # else :
-    #     revision_result = research_result
-    #     revision_skipped += 1
-
-    retry = 0
-
-    while best_score < TARGET_SCORE and retry < MAX_RETRIES:
-
-        revision_result = revision_agent(
-            goal,
-            task,
-            best_result,
-            best_critic
-        )
-
-        revision_executed+=1
-
-        critic_result = critic_agent(
-            goal,
-            task,
-            revision_result
-        )
-
+        research_input = f"""
+        Goal:
+        {goal}
+        Task:
+        {task}
+        """
+        research_result = research_agent(research_input)
+        critic_result = critic_agent(goal,task,research_result)
         score = critic_result["score"]
 
-        if score > best_score:
-            best_score = score
-            best_result = revision_result
-            best_critic = critic_result
+        best_score = score
+        best_result = research_result
+        best_critic = critic_result
 
-        retry+=1
+        retry = 0
 
-    if revision_executed == 0:
-        revision_skipped =1
+        while best_score < TARGET_SCORE and retry < MAX_RETRIES:
 
-    summary_result = summary_agent(best_result)
-    # print(f"Finished: {task}")
+            revision_result = revision_agent(
+                goal,
+                task,
+                best_result,
+                best_critic
+            )
+
+            revision_executed+=1
+
+            critic_result = critic_agent(
+                goal,
+                task,
+                revision_result
+            )
+
+            score = critic_result["score"]
+
+            if score > best_score:
+                best_score = score
+                best_result = revision_result
+                best_critic = critic_result
+
+            retry+=1
+
+        if revision_executed == 0:
+            revision_skipped =1
+
+        summary_result = summary_agent(best_result)
+        # print(f"Finished: {task}")
+
+        return{
+            "task":task,
+            "research":research_result,
+            "critic":best_critic,
+            "revision":best_result,
+            "summary":summary_result,
+            "revision_executed": revision_executed,
+            "revision_skipped": revision_skipped,
+            "status":"SUCCESS"
+        }
     
-    return{
-        "task":task,
-        "research":research_result,
-        "critic":best_critic,
-        "revision":best_result,
-        "summary":summary_result,
-        "revision_executed": revision_executed,
-        "revision_skipped": revision_skipped
+    except Exception as e:
+
+        return {
+            "task":task,
+            "research":research_result,
+            "critic":best_critic,
+            "revision":best_result,
+            "summary":summary_result,
+            "revision_executed":revision_executed,
+            "revision_skipped":revision_skipped,
+            "status":"FAILED",
+            "error":f"{type(e).__name__}: {e}"
+
         }
     
 def run_workflow(user_query):
@@ -174,7 +196,8 @@ def run_workflow(user_query):
     #Send task,goal to research agent and research output to critic agent
     revision_executed = 0
     revision_skipped = 0
-    MAX_WORKERS = 3
+
+    failed_tasks = 0
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = []
@@ -189,12 +212,20 @@ def run_workflow(user_query):
         for future in futures:
             result = future.result()
             all_results.append(result)
-            summary_list.append(result["summary"])
-            revision_executed += result["revision_executed"]
-            revision_skipped += result["revision_skipped"]
+
+            if result["status"] == "SUCCESS":
+                summary_list.append(result["summary"])
+                revision_executed += result["revision_executed"]
+                revision_skipped += result["revision_skipped"]
+
+            else:
+                print(f"TASK FAILED : {result['task']}")
+                print(f"Reason: {result['error']}")
+                failed_tasks+=1
 
     metrics.revision_executed = revision_executed
     metrics.revision_skipped = revision_skipped
+    metrics.failed_tasks = failed_tasks
 
     if len(tasks) > 0:
         metrics.revision_rate = round(
@@ -202,15 +233,21 @@ def run_workflow(user_query):
             2
         )
 
-    summary = "\n".join(summary_list)
-    final_summary = summary_agent(summary)
-    save_decision = memory_save_agent(
-        enhanced_user_query,
-        final_summary
+    if summary_list:
+        summary = "\n".join(summary_list)
+        final_summary = summary_agent(summary)
+    else:
+        final_summary = "Workflow failed. No successful task summaries were generated."
+
+
+    if summary_list:
+        save_decision = memory_save_agent(
+            enhanced_user_query,
+            final_summary
         )
     
-    if save_decision == "SAVE_MEMORY":
-        save_memory(final_summary)
+        if save_decision == "SAVE_MEMORY":
+            save_memory(final_summary)
 
     end_time = time.time()
 

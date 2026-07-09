@@ -1,8 +1,8 @@
 from agents.worker_agents.research_agent import research_agent
 
-topic = f"""
+topic = """
 Goal:
-Design WhatsApp Messaging System
+Design YouTube System
 
 Task:
 Design High Level Architecture
@@ -10,5 +10,5 @@ Design High Level Architecture
 
 result = research_agent(topic)
 
-print("\nResearch output :\n")
+print("\nResearch Output:\n")
 print(result)

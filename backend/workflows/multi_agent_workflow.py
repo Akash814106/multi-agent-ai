@@ -98,6 +98,7 @@ def process_task(goal,task):
             "critic":best_critic,
             "revision":best_result,
             "summary":summary_result,
+            "best_score": best_score,
             "revision_executed": revision_executed,
             "revision_skipped": revision_skipped,
             "status":"SUCCESS"
@@ -111,6 +112,7 @@ def process_task(goal,task):
             "critic":best_critic,
             "revision":best_result,
             "summary":summary_result,
+            "best_score": best_score,
             "revision_executed":revision_executed,
             "revision_skipped":revision_skipped,
             "status":"FAILED",
@@ -300,13 +302,23 @@ def run_workflow(user_query):
         )
 
     return {
-        "goal":goal,
-        "memory":memory_context,
-        "enhanced_user_query":enhanced_user_query,
-        "plan":plan,
-        "tasks":tasks,
-        "results":all_results,
-        "final_summary":final_summary,
-        "metrics":vars(metrics)
-    }      
+        "goal": goal,
+        "memory": memory_context,
+        "enhanced_user_query": enhanced_user_query,
+        "plan": plan,
+        "tasks": tasks,
+        "results": all_results,
+        "final_summary": final_summary,
+        "metrics": vars(metrics),
+    
+        "workflow_steps": [
+            "Query Routed",
+            "Query Enhanced",
+            "Memory Retrieved",
+            "Planning Completed",
+            "Research Completed",
+            "Critic Completed",
+            "Summary Generated"
+        ]
+    }    
     

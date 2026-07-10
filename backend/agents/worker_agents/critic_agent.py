@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 import json
 from langchain_groq import ChatGroq
-from utils.api_counter import increment
+from backend.utils.api_counter import increment
 
 load_dotenv()
 groq_api_key3 = os.getenv("GROQ_API_KEY3")

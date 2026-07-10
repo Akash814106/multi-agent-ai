@@ -2,22 +2,23 @@ import time
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
-from utils.workflow_metrics import WorkflowMetrics
+from backend.utils.workflow_metrics import WorkflowMetrics
 
-from memory.chroma_memory import retrieve_memory,save_memory
 
-from agents.worker_agents.planner_agent import planner_agent
-from agents.worker_agents.research_agent import research_agent
-from agents.worker_agents.critic_agent import critic_agent
-from agents.worker_agents.revision_agent import revision_agent
-from agents.worker_agents.summary_agent import summary_agent
-from agents.worker_agents.direct_response_agent import direct_response_agent
+from backend.memory.chroma_memory import retrieve_memory,save_memory
 
-from agents.control_agents.memory_router_agent import memory_router_agent
-from agents.control_agents.memory_save_agent import memory_save_agent
-from agents.control_agents.query_router_agent import query_router_agent
-from agents.control_agents.query_enhancement_agent import query_enhancement_agent
-from utils.task_parser import extract_tasks
+from backend.agents.worker_agents.planner_agent import planner_agent
+from backend.agents.worker_agents.research_agent import research_agent
+from backend.agents.worker_agents.critic_agent import critic_agent
+from backend.agents.worker_agents.revision_agent import revision_agent
+from backend.agents.worker_agents.summary_agent import summary_agent
+from backend.agents.worker_agents.direct_response_agent import direct_response_agent
+
+from backend.agents.control_agents.memory_router_agent import memory_router_agent
+from backend.agents.control_agents.memory_save_agent import memory_save_agent
+from backend.agents.control_agents.query_router_agent import query_router_agent
+from backend.agents.control_agents.query_enhancement_agent import query_enhancement_agent
+from backend.utils.task_parser import extract_tasks
 
 
 MAX_RETRIES = 2
@@ -135,11 +136,34 @@ def run_workflow(user_query):
     # print(router_result)
 
     if query_decision == "DIRECT_RESPONSE":
+
         result = direct_response_agent(user_query)
-        save_decision = memory_save_agent(user_query,result)
+
+        save_decision = memory_save_agent(
+            user_query,
+            result
+        )
+
         if save_decision == "SAVE_MEMORY":
             save_memory(result)
-        return result
+
+        return {
+            "goal": "Direct Response",
+            "memory": "",
+            "enhanced_user_query": user_query,
+            "plan": "",
+            "tasks": [],
+            "results": [],
+            "final_summary": result,
+            "metrics": {
+                "execution_time": 0,
+                "memory_used": False,
+                "task_count": 0,
+                "revision_executed": 0,
+                "revision_skipped": 0,
+                "failed_tasks": 0
+            }
+        }
     
     elif query_decision == "MULTI_AGENT_WORKFLOW":
         print("\n--- Multi-Agent Workflow Selected ---\n")
@@ -182,9 +206,21 @@ def run_workflow(user_query):
 
     #Exrtact goal
     goal = ""
-    for line in plan.splitlines():
+
+    lines = plan.splitlines()
+
+    for i, line in enumerate(lines):
+
         if line.startswith("Goal:"):
-            goal = line.replace("Goal:", "").strip()
+
+            extracted = line.replace("Goal:", "").strip()
+
+            if extracted:
+                goal = extracted
+
+            elif i + 1 < len(lines):
+                goal = lines[i + 1].strip()
+
             break
 
     #Extract tasks from plan
@@ -264,6 +300,7 @@ def run_workflow(user_query):
         )
 
     return {
+        "goal":goal,
         "memory":memory_context,
         "enhanced_user_query":enhanced_user_query,
         "plan":plan,

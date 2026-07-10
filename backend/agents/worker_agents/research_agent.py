@@ -1,10 +1,10 @@
 from dotenv import load_dotenv
 import os
 from langchain_groq import ChatGroq
-from utils.api_counter import increment
+from backend.utils.api_counter import increment
 
-from utils.web_search import search_web
-from utils.search_query_builder import build_search_query
+from backend.utils.web_search import search_web
+from backend.utils.search_query_builder import build_search_query
 
 load_dotenv()
 groq_api_key2 = os.getenv("GROQ_API_KEY2")

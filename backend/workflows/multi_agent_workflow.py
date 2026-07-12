@@ -120,7 +120,7 @@ def process_task(goal,task):
 
         }
     
-def run_workflow(user_query):
+def run_workflow(user_query,current_user):
 
     start_time = time.time()
 
@@ -139,32 +139,60 @@ def run_workflow(user_query):
 
     if query_decision == "DIRECT_RESPONSE":
 
-        result = direct_response_agent(user_query)
-
-        save_decision = memory_save_agent(
+        memories = retrieve_memory(
             user_query,
-            result
+            current_user,
         )
 
+        if memories and memories[0]:
+
+            memory_context = "\n".join(memories[0])
+
+            enhanced_query = f"""
+            Memory:
+            {memory_context}
+
+            Question:
+            {user_query}
+            """
+
+        else:
+
+            enhanced_query = user_query
+
+        result = direct_response_agent(enhanced_query)
+
+        save_decision = memory_save_agent(user_query,result)
+
         if save_decision == "SAVE_MEMORY":
-            save_memory(result)
+
+            save_memory(result,current_user)
 
         return {
+
             "goal": "Direct Response",
-            "memory": "",
-            "enhanced_user_query": user_query,
+
+            "memory": memory_context if memories and memories[0] else "",
+
+            "enhanced_user_query": enhanced_query,
+
             "plan": "",
+
             "tasks": [],
+
             "results": [],
+
             "final_summary": result,
+
             "metrics": {
                 "execution_time": 0,
-                "memory_used": False,
+                "memory_used": bool(memories and memories[0]),
                 "task_count": 0,
                 "revision_executed": 0,
                 "revision_skipped": 0,
                 "failed_tasks": 0
             }
+
         }
     
     elif query_decision == "MULTI_AGENT_WORKFLOW":
@@ -182,7 +210,7 @@ def run_workflow(user_query):
     # print("\nEnhanced Query :\n")
     # print(enhanced_user_query)
     #Retrieve memory
-    memories = retrieve_memory(enhanced_user_query)
+    memories = retrieve_memory(enhanced_user_query,current_user,)
     if memories and memories[0]:
         memory_context = "\n".join(memories[0])
     else:
@@ -285,7 +313,7 @@ def run_workflow(user_query):
         )
     
         if save_decision == "SAVE_MEMORY":
-            save_memory(final_summary)
+            save_memory(final_summary,current_user)
 
     end_time = time.time()
 

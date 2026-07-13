@@ -43,6 +43,8 @@ export default function useConversation(user) {
 
     const [loading, setLoading] = useState(false);
 
+    const [thinking, setThinking] = useState(false);
+
     const [statusList, setStatusList] = useState([]);
 
     useEffect(() => {
@@ -62,17 +64,17 @@ export default function useConversation(user) {
 
 
     useEffect(() => {
-        
+
         const savedConversations = localStorage.getItem(conversationKey);
-        
+
         if (savedConversations) {
-        
+
             setConversations(
                 JSON.parse(savedConversations)
             );
-        
+
         } else {
-        
+
             setConversations([
                 {
                     id: 1,
@@ -80,17 +82,17 @@ export default function useConversation(user) {
                     messages: [],
                 },
             ]);
-        
+
         }
-    
+
         const savedActive = localStorage.getItem(
             activeConversationKey
         );
-    
+
         setActiveConversation(
             savedActive ? Number(savedActive) : 1
         );
-    
+
     }, [conversationKey, activeConversationKey]);
 
     
@@ -182,12 +184,32 @@ export default function useConversation(user) {
 
         if (!query.trim()) return;
 
-        setLoading(true);
-
-        setStatusList([
+        const workflowSteps = [
             "Query Received",
-            "Sending to Backend..."
-        ]);
+            "Memory Retrieved",
+            "Planner Agent",
+            "Research Agent",
+            "Critic Agent",
+            "Revision Agent",
+            "Summary Agent",
+        ];
+
+        setLoading(true);
+        setThinking(true);
+
+        setStatusList([]);
+
+        workflowSteps.forEach((step, index) => {
+
+            setTimeout(() => {
+
+                setStatusList(prev => [...prev, step]);
+
+            }, index * 350);
+
+        });
+
+
 
         try {
 
@@ -214,6 +236,8 @@ export default function useConversation(user) {
                 }
             
             );
+
+            setThinking(false);
 
             const newMessage = {
 
@@ -261,7 +285,11 @@ export default function useConversation(user) {
 
             setQuery("");
 
-            setStatusList([]);
+            // setTimeout(() => {
+
+            //     setStatusList([]);
+
+            // }, 1000);
 
         }
 
@@ -274,6 +302,8 @@ export default function useConversation(user) {
                 "Backend Error"
 
             ]);
+
+            setThinking(false);
 
         }
 
@@ -303,6 +333,8 @@ export default function useConversation(user) {
 
         loading,
 
+        thinking,
+
         statusList,
 
         query,
@@ -318,6 +350,7 @@ export default function useConversation(user) {
         renameConversation,
 
          deleteConversation,
+
 
     };
 

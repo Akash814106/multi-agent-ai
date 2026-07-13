@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Send } from "lucide-react";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -37,6 +38,8 @@ function App() {
     currentConversation,
 
     loading,
+
+    thinking,
 
     statusList,
 
@@ -119,6 +122,8 @@ function App() {
 
       <Sidebar
 
+        user = {user}
+
         conversations={conversations}
 
         activeConversation={activeConversation}
@@ -169,40 +174,49 @@ function App() {
             
           </div>
 
-          <div className="mt-10 flex gap-4">
+          
+          <div className="mt-10">
 
-            <input
-
-              value={query}
-
-              disabled={loading}
-
-              onChange={(e) => setQuery(e.target.value)}
-
-              className="flex-1 p-4 rounded-xl bg-slate-800 border border-slate-700"
-
-              placeholder="Ask anything..."
-
-            />
-
-            <button
-
-              onClick={sendQuery}
-
-              disabled={loading}
-
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-8 rounded-xl"
-
-            >
-
-              {loading ? "Running..." : "Run"}
-
-            </button>
-
-          </div>
+            <div className="flex items-center bg-slate-800 border border-slate-700 rounded-2xl px-5 py-3">
+          
+                <input
+                    value={query}
+                    disabled={loading}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && !loading) {
+                            sendQuery();
+                        }
+                    }}
+                    placeholder="Ask anything..."
+                    className="flex-1 bg-transparent outline-none text-lg placeholder:text-slate-400"
+                />
+        
+                <div className="flex items-center gap-5">
+                  
+                    <span className="text-sm text-slate-400 hidden md:flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                        Press Enter to send
+                    </span>
+                  
+                    <button
+                        onClick={sendQuery}
+                        disabled={loading}
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition-all duration-200 px-6 py-3 rounded-xl disabled:bg-slate-600"
+                    >
+                        <Send size={18} />
+                        {loading ? "Running..." : "Run"}
+                    </button>
+                  
+                </div>
+                  
+            </div>
+                  
+        </div>
 
           <ChatView
             loading={loading}
+            thinking={thinking}
             statusList={statusList}
             conversation={currentConversation}
           />

@@ -8,6 +8,12 @@ load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = os.getenv("JWT_ALGORITHM")
 
+if not SECRET_KEY:
+    raise ValueError("JWT_SECRET_KEY environment variable is not set.")
+
+if not ALGORITHM:
+    raise ValueError("JWT_ALGORITHM environment variable is not set.")
+
 
 def create_access_token(data: dict):
 

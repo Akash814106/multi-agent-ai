@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/api";
+
 
 export default function useAuth() {
 
@@ -23,9 +24,9 @@ export default function useAuth() {
 
     ) {
 
-        await axios.post(
+        await api.post(
 
-            "http://127.0.0.1:8000/register",
+            "/register",
 
             {
                 username,
@@ -44,9 +45,9 @@ export default function useAuth() {
 
     ) {
 
-        const response = await axios.post(
+        const response = await api.post(
 
-            "http://127.0.0.1:8000/login",
+            "/login",
 
             {
                 email,

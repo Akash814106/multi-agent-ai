@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/api";
+
 
 export default function useConversation(user) {
 
@@ -215,9 +216,9 @@ export default function useConversation(user) {
 
             const token = localStorage.getItem("token");
 
-            const response = await axios.post(
+            const response = await api.post(
             
-                "http://127.0.0.1:8000/chat",
+                "/chat",
             
                 {
                 
@@ -284,12 +285,6 @@ export default function useConversation(user) {
             );
 
             setQuery("");
-
-            // setTimeout(() => {
-
-            //     setStatusList([]);
-
-            // }, 1000);
 
         }
 

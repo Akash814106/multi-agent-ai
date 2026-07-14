@@ -189,7 +189,7 @@ function App() {
                           disabled={loading}
                           className="ml-4 w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 transition-all duration-300 flex items-center justify-center"
                       >
-                                                
+
                           {loading ? (
                           
                               <LoaderCircle
@@ -202,7 +202,7 @@ function App() {
                               <Send size={20} />
                           
                           )}
-                      
+
                       </button>
                           
                     </div>
@@ -210,7 +210,7 @@ function App() {
                     <div className="flex justify-between items-center border-t border-slate-700 px-6 py-3 text-sm text-slate-400">
                           
                         <span>
-                            Press <span className="font-semibold text-white">Enter</span> to send
+                            <span className="font-semibold text-white">Press Enter to send</span>
                         </span>
                           
                         <span className="flex items-center gap-2">

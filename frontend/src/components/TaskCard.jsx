@@ -1,17 +1,27 @@
 import { useState } from "react";
 
 function Section({ title, color, children }) {
+
     return (
+
         <div className="space-y-2">
-            <h4 className={`font-semibold ${color}`}>
+
+            <h4 className={`text-base font-semibold ${color}`}>
+
                 {title}
+
             </h4>
 
-            <div className="bg-slate-900 rounded-lg border border-slate-700 p-4 text-slate-300 whitespace-pre-wrap leading-7">
+            <div className="bg-slate-900 rounded-lg border border-slate-700 p-4 text-sm text-slate-300 whitespace-pre-wrap leading-6">
+
                 {children}
+
             </div>
+
         </div>
+
     );
+
 }
 
 export default function TaskCard({ taskData, index }) {
@@ -24,18 +34,18 @@ export default function TaskCard({ taskData, index }) {
 
             <button
                 onClick={() => setExpanded(!expanded)}
-                className="w-full px-6 py-5 flex justify-between items-start hover:bg-[#313d55] transition"
+                className="w-full px-6 py-4 flex justify-between items-start hover:bg-[#313d55] transition"
             >
 
                 <div className="text-left flex-1">
 
-                    <h3 className="text-2xl font-semibold text-white">
+                    <h3 className="text-xl font-semibold text-white">
 
                         📋 Task {index + 1}
 
                     </h3>
 
-                    <p className="text-slate-400 mt-2 leading-7">
+                    <p className="text-slate-400 text-sm mt-2 leading-6">
 
                         {taskData.task}
 
@@ -46,7 +56,7 @@ export default function TaskCard({ taskData, index }) {
                 <div className="flex items-center gap-4 ml-6">
 
                     <span
-                        className={`px-4 py-1 rounded-full text-sm font-semibold ${
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
                             taskData.status === "SUCCESS"
                                 ? "bg-green-600 text-white"
                                 : "bg-red-600 text-white"
@@ -55,7 +65,7 @@ export default function TaskCard({ taskData, index }) {
                         {taskData.status}
                     </span>
 
-                    <span className="text-2xl text-white">
+                    <span className="text-xl text-white">
 
                         {expanded ? "▴" : "▾"}
 
@@ -69,7 +79,7 @@ export default function TaskCard({ taskData, index }) {
 
                 expanded && (
 
-                    <div className="border-t border-slate-700 bg-[#202a3b] p-6 space-y-8">
+                    <div className="border-t border-slate-700 bg-[#202a3b] p-5 space-y-7">
 
                         <Section
                             title="Research Output"
@@ -85,7 +95,7 @@ export default function TaskCard({ taskData, index }) {
 
                             <div className="mb-4">
 
-                                <span className="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm">
+                                <span className="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs">
 
                                     Score : {taskData.best_score}/10
 
@@ -115,13 +125,13 @@ export default function TaskCard({ taskData, index }) {
 
                             <div className="bg-slate-900 border border-slate-700 rounded-xl p-4">
 
-                                <div className="text-slate-400">
+                                <div className="text-sm text-slate-400">
 
                                     Revisions Executed
 
                                 </div>
 
-                                <div className="text-3xl font-bold text-white mt-2">
+                                <div className="text-2xl font-bold text-white mt-2">
 
                                     {taskData.revision_executed}
 
@@ -131,13 +141,13 @@ export default function TaskCard({ taskData, index }) {
 
                             <div className="bg-slate-900 border border-slate-700 rounded-xl p-4">
 
-                                <div className="text-slate-400">
+                                <div className="text-sm text-slate-400">
 
                                     Revisions Skipped
 
                                 </div>
 
-                                <div className="text-3xl font-bold text-white mt-2">
+                                <div className="text-2xl font-bold text-white mt-2">
 
                                     {taskData.revision_skipped}
 

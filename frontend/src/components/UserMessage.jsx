@@ -1,46 +1,47 @@
 export default function UserMessage({ query }) {
+
+    const username =
+        localStorage.getItem("username") || "A";
+
     return (
+
         <div className="mt-8">
 
-            <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl p-5 shadow-lg">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl px-6 py-4 shadow-lg">
 
-                <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center justify-between">
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
 
-                        <div className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold">
-                            A
-                        </div>
+                        <div className="w-11 h-11 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold text-lg shrink-0">
 
-                        <div>
-
-                            <h3 className="font-semibold text-white">
-                                You
-                            </h3>
-
-                            <p className="text-xs text-blue-100">
-                                User
-                            </p>
+                            {username.charAt(0).toUpperCase()}
 
                         </div>
+
+                        <p className="text-white text-xl font-medium truncate">
+
+                            {query}
+
+                        </p>
 
                     </div>
 
-                    <span className="text-sm text-blue-100">
+                    <span className="ml-6 text-sm text-blue-100 whitespace-nowrap">
+
                         {new Date().toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                         })}
+
                     </span>
 
                 </div>
 
-                <p className="text-white text-lg leading-7">
-                    {query}
-                </p>
-
             </div>
 
         </div>
+
     );
+
 }

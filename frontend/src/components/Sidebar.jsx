@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, LogOut } from "lucide-react";
+import { Plus, Trash2} from "lucide-react";
 
 function Sidebar({
     user,
@@ -157,22 +157,6 @@ function Sidebar({
                     </div>
 
                 ))}
-
-            </div>
-
-            {/* Logout */}
-
-            <div className="p-5 border-t border-slate-800">
-
-                <button
-                    className="w-full border border-slate-700 rounded-2xl py-4 flex items-center justify-center gap-3 hover:bg-slate-800 transition text-lg"
-                >
-
-                    <LogOut size={20} />
-
-                    Logout
-
-                </button>
 
             </div>
 

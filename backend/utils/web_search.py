@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
+from backend.utils.env_loader import *
 import os
 from exa_py import Exa
 
-load_dotenv()
+
 
 exa = Exa(
     api_key=os.getenv("EXA_API_KEY")

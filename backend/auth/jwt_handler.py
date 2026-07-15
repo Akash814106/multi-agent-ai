@@ -1,9 +1,9 @@
 from jose import jwt
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
+from backend.utils.env_loader import *
 import os
 
-load_dotenv()
+
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = os.getenv("JWT_ALGORITHM")

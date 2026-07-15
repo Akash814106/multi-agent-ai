@@ -1,4 +1,4 @@
-from dotenv import load_dotenv
+from backend.utils.env_loader import *
 import os
 from langchain_groq import ChatGroq
 from backend.utils.api_counter import increment
@@ -6,7 +6,7 @@ from backend.utils.api_counter import increment
 from backend.utils.web_search import search_web
 from backend.utils.search_query_builder import build_search_query
 
-load_dotenv()
+
 groq_api_key2 = os.getenv("GROQ_API_KEY2")
 
 llm = ChatGroq(

@@ -25,6 +25,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "https://agentflow-fhc0.onrender.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
